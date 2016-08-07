@@ -33,6 +33,20 @@ describe "Static pages" do
 					page.should have_selector("li##{item.id}", text: item.content)
 				end
 			end
+
+			describe "micropost count" do
+				let(:micropost_count) { Micropost.where(user_id: user.id).count }
+
+				specify { micropost_count.should == user.microposts.count }
+
+				# describe "it should be properly pluralized" do
+				# 	before do
+				# 		visit root_path
+				# 		click_link "delete"
+				# 	end
+				# 	it { should have_selector('span', text: "1 micropost") }
+				# end
+			end
 		end
 	end
 
@@ -74,6 +88,18 @@ describe "Static pages" do
   		page.should have_selector 'title', text: full_title('Sign up')
   		click_link "sample app"
   		page.should have_selector 'title', text: full_title('')
+  	end
+
+  	describe "micropost pagination" do
+  		let(:user) { FactoryGirl.create(:user) }
+  		before do
+  			31.times { FactoryGirl.create(:micropost, user: user) }
+  			sign_in user
+  			visit root_path
+  		end
+  		after { user.microposts.destroy_all }
+
+  		it { should have_selector("div.pagination") }
   	end
 end
 
