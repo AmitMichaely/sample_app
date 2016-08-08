@@ -69,6 +69,8 @@ Spork.prefork do
     # rspec-rails.
     config.infer_base_class_for_anonymous_controllers = false
 
+    config.include Rails.application.routes.url_helpers
+
     config.include FactoryGirl::Syntax::Methods
     FactoryGirl.definition_file_paths = [File.expand_path('../factories', __FILE__)]
   end
